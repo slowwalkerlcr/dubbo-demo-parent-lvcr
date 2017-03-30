@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 这个配置是作为负载均衡策略使用 -->
+
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="hello-world-app-consumer" />
+
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+
+	<dubbo:registry address="zookeeper://192.168.148.130:2181"
+		id="zkname" />
+
+	<dubbo:protocol name="dubbo" port="20881" />
+
+
+	<!-- 声明需要暴露的服务接口   负载均衡 loadBalance指定负载均衡的策略-->
+	<dubbo:reference id="demoService"
+		interface="org.dubbo.demo.api.lvcr.IHelloWorldService" protocol="dubbo" loadBalance="ConsistentHash "/>
+
+</beans>
